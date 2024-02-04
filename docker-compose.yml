@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+
+  cyphal:
+    image: "brtcyphal/cyphal_tools:latest"
+    container_name: cyphal
+    network_mode: "host"
+    working_dir: /$HOME
+    volumes: 
+      # - <your_host_path_to_BRTCyphal_repo>:<container_path>
+      - $HOME/BRT/gitwork/BRTCyphal:$HOME/BRTCyphal
+    environment:
+      TZ: Europe/Moscow 
+    stdin_open: true
+    tty: true
