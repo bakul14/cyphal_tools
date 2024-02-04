@@ -7,8 +7,9 @@ services:
     network_mode: "host"
     working_dir: /$HOME
     volumes: 
-      # - <your_host_path_to_BRTCyphal_repo>:<container_path>
+      # - <your_host_path>:<container_path>
       - $HOME/BRT/gitwork/BRTCyphal:$HOME/BRTCyphal
+      - $HOME/.gitconfig:/etc/gitconfig
     environment:
       TZ: Europe/Moscow 
     stdin_open: true
