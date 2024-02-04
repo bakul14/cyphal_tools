@@ -43,7 +43,4 @@ git submodule update --init --recursive
 echo "To start the virtual can bus, restart the computer now (It is required only once)."
 
 echo "Then you can run the cyphal container using the commands below:
-      docker-compose up -d
-      docker-compose exec cyphal bash"
-echo "To stop the container, do the following:
-      docker-compose down"
+      docker-compose run cyphal bash"
