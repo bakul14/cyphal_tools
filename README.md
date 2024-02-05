@@ -6,6 +6,9 @@
 sudo apt update && sudo apt install git
 ```
 
+### Initialize git if it has not been done yet:
+https://git-scm.com/book/ru/v2/Введение-Первоначальная-настройка-Git
+
 ## Deployment
 ### Clone this repository into $HOME/BRT/gitwork:
 ```bash
