@@ -34,7 +34,7 @@ if [ -d "$HOME/BRT/gitwork/BRTCyphal" ]; then
     cd BRTCyphal
     git pull
 else
-    git clone https://github.com/Bauman-Racing-Team/BRTCyphal.git
+    git git@github.com:Bauman-Racing-Team/BRTCyphal.git
     cd BRTCyphal
 fi
 

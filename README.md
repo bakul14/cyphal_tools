@@ -7,7 +7,7 @@ sudo apt update && sudo apt install git
 ```
 
 ### Initialize git if it has not been done yet:
-https://git-scm.com/book/ru/v2/Введение-Первоначальная-настройка-Git
+https://docs.github.com/ru/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 
 ## Deployment
 ### Clone this repository into $HOME/BRT/gitwork:
@@ -22,6 +22,13 @@ mkdir -p $HOME/BRT/gitwork \
 cd $HOME/BRT/gitwork/cyphal_tools \
 && sudo chmod +x install.sh \
 && sudo ./install.sh
+```
+
+### Add docker to the user group:
+```bash
+groupadd docker \
+&& usermod -aG docker $USER \
+&& newgrp docker 
 ```
 
 ### To install BRTCyphal repository and dependencies for the virtual CAN bus, run the script deploy_infrastructure.sh:
