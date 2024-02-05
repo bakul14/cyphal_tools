@@ -26,8 +26,8 @@ cd $HOME/BRT/gitwork/cyphal_tools \
 
 ### Add docker to the user group:
 ```bash
-groupadd docker \
-&& usermod -aG docker $USER \
+sudo groupadd docker \
+&& sudo usermod -aG docker $USER \
 && newgrp docker 
 ```
 
