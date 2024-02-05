@@ -24,7 +24,7 @@ cd $HOME/BRT/gitwork/cyphal_tools \
 ### To install BRTCyphal repository and dependencies for the virtual CAN bus, run the script deploy_infrastructure.sh:
 ```bash
 cd $HOME/BRT/gitwork/cyphal_tools \
-&& sudo chmod +x install.sh \
+&& sudo chmod +x deploy_infrastructure.sh \
 && sudo ./deploy_infrastructure.sh
 ```
 
