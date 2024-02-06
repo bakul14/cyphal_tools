@@ -10,6 +10,7 @@ services:
       # - <your_host_path>:<container_path>
       - $HOME/BRT/gitwork/BRTCyphal:$HOME/BRTCyphal
       - $HOME/.gitconfig:/etc/gitconfig
+      - $HOME/.ssh:$HOME/.ssh
     environment:
       TZ: Europe/Moscow 
     stdin_open: true
