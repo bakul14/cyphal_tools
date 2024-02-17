@@ -25,11 +25,9 @@ Name=vcan0
 " >> /etc/systemd/network/80-vcan.network
 
 # Cloning repositories:
-mkdir -p $HOME/BRT/gitwork/
+cd $HOME/cyphalhome
 
-cd $HOME/BRT/gitwork/
-
-if [ -d "$HOME/BRT/gitwork/BRTCyphal" ]; then
+if [ -d "$HOME/cyphalhome/BRTCyphal" ]; then
     echo "BRTCyphal already exists."
     cd BRTCyphal
     git pull
@@ -41,6 +39,3 @@ fi
 git submodule update --init --recursive
 
 echo "To start the virtual can bus, restart the computer now (It is required only once)."
-
-echo "Then you can run the cyphal container using the commands below:
-      docker-compose run cyphal bash"

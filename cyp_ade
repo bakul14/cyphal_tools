@@ -1,0 +1,87 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+ADE_IMAGES=$(grep 'ade_' .aderc)                                                                                # grep all ade images from .aderc
+ADE_INIT_IMAGE=$(echo $ADE_IMAGES | awk -F'brtcyphal/cyphal_tools:' '{print $2}' | awk '{print $1}' | head -n 1) # find current image tag for ade_brt in .aderc
+ADE_IDES=($ADE_IMAGES)
+ADE_IDES=("${ADE_IDES[@]:1}")
+
+first="start --update"
+ade_vars=""
+ADE_TAG=""
+
+while [ $# -gt 0 ]; do
+  case $1 in
+  stop)
+    first="stop"
+    if [ -n "$2" ] && [[ "$2" != -* ]]; then
+      echo "Error: \"stop\" can't process \"$2\""
+      exit 1
+    fi
+    ;;
+
+  -n | --no-update)
+    first="start"
+    ;;
+
+  -t | --tag)
+    ADE_TAG=$2
+    ;;
+
+  --)
+    ade_vars="-- "${@:2}
+    ;;
+  *)
+    if [ "$ADE_TAG" == "" ] && [[ "$ade_vars" == "" ]]; then
+      echo -e "No \"$1\". Use other commands:\n\tstop \n\t-n --no-update \n\t-t --tag \n\t-- {ade_vars}"
+      exit 1
+    fi
+    ;;
+  esac
+  shift
+done
+
+# focus on specific ade container
+if [ "$ADE_TAG" == "" ]; then
+  export ADE_NAME=$ADE_INIT_IMAGE
+  docker container ls | grep -wq "brtcyphal/cyphal_tools:$ADE_INIT_IMAGE"
+  ade_containers=$?
+else
+  ADE_IMAGES="${ADE_IMAGES//$ADE_INIT_IMAGE/$ADE_TAG}" # edit tag for ade_brt image
+  export ADE_IMAGES=$ADE_IMAGES                        # set up all ade images
+  export ADE_NAME=$ADE_TAG                             # set up environment name for ade session
+
+  docker container ls | grep -wq "brtcyphal/cyphal_tools:$ADE_TAG"
+  ade_containers=$?
+fi
+
+if [ "$ADE_TAG" == "" ] && [ "$first" == "stop" ]; then                      # stop all ade environments
+  echo "Stop all ade environments"
+  docker ps -a | grep ade | awk '{print $1}' | xargs docker stop >/dev/null # remove all containers which contain name "ade"
+elif [ "$first" == "stop" ]; then # stop specific ade environment
+  # ade stop work incorrectly! Use your own scripts
+  echo "Stop $ADE_TAG"
+  docker stop $(docker ps --filter "name=^$ADE_TAG$" --format "{{.ID}}")
+  
+  for ide in "${ADE_IDES[@]}"; do
+    if [ 0 != $(expr index "$ide" ":") ]; then
+      ide="${ide/:/_}"
+    else 
+      ide="${ide}_latest"
+    fi
+
+    docker stop $(docker ps --filter "name=^$ADE_TAG"_"$ide$" --format "{{.ID}}")
+  done
+elif [ $ade_containers == 0 ]; then # ade running
+  ade enter
+else # ade start (or start --no-update)
+  ade $first $ade_vars
+
+  docker image prune --force
+  container_id="$(docker ps -aq -f name=ade_brtcyphal_*)"
+  if [ $container_id ]; then
+    docker rm $container_id
+  fi
+
+  ade enter
+fi
