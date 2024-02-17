@@ -1,8 +1,65 @@
 FROM ghcr.io/opencyphal/toolshed:ts22.4.5 
 
-RUN pip install -U nunavut
+# Ade base image reqs
 
-RUN pip install yakut
+RUN apt-get update && \
+    echo 'Etc/UTC' > /etc/timezone && \
+    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    apt-get install -y \
+        locales \
+        sudo \
+        tzdata \
+  && rm -rf /var/lib/apt/lists/*
+RUN locale-gen en_US.UTF-8; dpkg-reconfigure -f noninteractive locales
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+
+# Add packages to build libs
+
+RUN apt-get update && \
+    apt-get install -y \
+    apt-utils \
+    build-essential \
+    curl \
+    g++ \
+    gcc \
+    git \
+    gnupg2 \
+    libasound2 \
+    libboost-all-dev \
+    libeigen3-dev \
+    libffi-dev \
+    libflann-dev \
+    libgdbm-dev \
+    libncurses5-dev \
+    libnss3-dev \
+    libpcap-dev \
+    libreadline-dev \
+    libssl-dev \
+    libusb-1.0-0-dev \
+    libvtk7-dev \
+    lsb-release \
+    python3-dev \
+    python3-pip \
+    zlib1g-dev \
+  && rm -rf /var/lib/apt/lists/* /tmp/apt-packages
+
+RUN apt-get update && \
+    apt-get install -y \
+    iproute2 \
+    net-tools 
+
+RUN pip install -U nunavut \
+    pip install -U yakut 
+
+COPY env.sh /etc/profile.d/ade_env.sh
+COPY entrypoint /ade_entrypoint
+ENTRYPOINT ["/ade_entrypoint"]
+CMD ["/bin/sh", "-c", "trap 'exit 147' TERM; tail -f /dev/null & wait ${!}"]
 
 # Building:
-# docker build --platform linux/amd64 -t brtcyphal/cyphal_tools:<tag> .
+# docker build --platform linux/amd64 -t brtcyphal/cyphal_tools:latest -t brtcyphal/cyphal_tools:<tag> .
