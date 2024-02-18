@@ -61,6 +61,14 @@ RUN pip install -U nunavut \
 COPY bashrc-git-prompt /
 RUN cat /bashrc-git-prompt >> /etc/skel/.bashrc && \
     rm /bashrc-git-prompt
+
+# Fix Tilix VTE
+
+RUN curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh > /bash_git \
+    && echo "source /bash_git" >> /etc/skel/.bashrc
+
+# ADE starting
+
 COPY env.sh /etc/profile.d/ade_env.sh
 COPY entrypoint /ade_entrypoint
 ENTRYPOINT ["/ade_entrypoint"]
