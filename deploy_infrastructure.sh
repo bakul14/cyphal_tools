@@ -2,7 +2,7 @@
 echo $PWD
 
 # Configuring CAN and virtual CAN interface to set up automatically:
-echo "
+sudo echo "
 can
 can_raw
 vcan
@@ -11,7 +11,7 @@ vcan
 systemctl start systemd-networkd
 systemctl enable systemd-networkd
 
-echo "
+sudo echo "
 [NetDev]
 Name=vcan0
 Kind=vcan
@@ -19,10 +19,15 @@ MTUBytes=8
 Description=Virtual CAN0 network interface
 " >> /etc/systemd/network/vcan0.netdev
 
-echo "
+sudo echo "
 [Match]
 Name=vcan0
 " >> /etc/systemd/network/80-vcan.network
+
+./create_aderc.sh
+
+rm $HOME/cyphalhome/.adehome
+touch $HOME/cyphalhome/.adehome
 
 # Cloning repositories:
 cd $HOME/cyphalhome
