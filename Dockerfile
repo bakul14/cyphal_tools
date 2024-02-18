@@ -51,7 +51,8 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y \
     iproute2 \
-    net-tools 
+    net-tools \
+    nano
 
 RUN pip install -U nunavut \
     pip install -U yakut 
