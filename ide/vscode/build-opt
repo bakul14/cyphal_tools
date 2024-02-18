@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Check that cyphal_vscode container is not running
+
+set -xe
+
+if [ "$(docker ps -aq -f name=brtcyphal/cyphal_vscode_latest)" ]; then
+  if [ ! "$(docker ps -aq -f status=exited -f name=brtcyphal/cyphal_vscode_latest)" ]; then
+    echo "cyphal_vscode container is running, stop ade and try again"
+    exit 1
+  fi
+  docker rm brtcyphal/cyphal_vscode_latest
+fi
+
+if [ "$(docker images -q brtcyphal/cyphal_vscode:latest)" ]; then
+  docker rmi brtcyphal/cyphal_vscode:latest
+fi
+
+cd "$(dirname "$(realpath "$0")")"
+
+if [ -z "$1" ]; then
+  VSCODE_VERSION="1.73.0"
+else
+  VSCODE_VERSION=$1
+fi
+
+curl -L "https://update.code.visualstudio.com/${VSCODE_VERSION}/linux-x64/stable" -o "vscode-${VSCODE_VERSION}.tar.gz"
+tar xfz "vscode-${VSCODE_VERSION}.tar.gz"
+mv VSCode-linux-x64 _opt_vscode
+
+cp env.sh _opt_vscode/.env.sh
+
+rm vscode*
+mv _opt_vscode _opt
+
+docker build -t brtcyphal/cyphal_vscode .
+
+rm -rf _opt
+
+# Building:
+# ./build-opt
+
+# Pushing:
+# docker push brtcyphal/cyphal_vscode:<tag>

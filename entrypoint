@@ -55,6 +55,8 @@ fi
 
 [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
+echo
 echo 'Bytes? Bits? We use OpenCyphal!'
+echo
 echo 'ADE startup completed.'
 exec "$@"

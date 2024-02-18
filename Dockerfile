@@ -56,10 +56,18 @@ RUN apt-get update && \
 RUN pip install -U nunavut \
     pip install -U yakut 
 
+# Bash-prompt
+
+COPY bashrc-git-prompt /
+RUN cat /bashrc-git-prompt >> /etc/skel/.bashrc && \
+    rm /bashrc-git-prompt
 COPY env.sh /etc/profile.d/ade_env.sh
 COPY entrypoint /ade_entrypoint
 ENTRYPOINT ["/ade_entrypoint"]
 CMD ["/bin/sh", "-c", "trap 'exit 147' TERM; tail -f /dev/null & wait ${!}"]
 
 # Building:
-# docker build --platform linux/amd64 -t brtcyphal/cyphal_tools:latest -t brtcyphal/cyphal_tools:<tag> .
+# docker build --platform linux/amd64 -t brtcyphal/cyphal_tools:cyphal -t brtcyphal/cyphal_tools:<tag> .
+
+# Pushing:
+# docker push brtcyphal/cyphal_tools:<tag>
