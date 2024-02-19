@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Check that cyphal_pycharm container is not running
+
+set -xe
+
+if [ "$(docker ps -aq -f name=brtcyphal/cyphal_pycharm_latest)" ]; then
+  if [ ! "$(docker ps -aq -f status=exited -f name=brtcyphal/cyphal_pycharm_latest)" ]; then
+    echo "cyphal_pycharm container is running, stop ade and try again"
+    exit 1
+  fi
+  docker rm brtcyphal/cyphal_pycharm_latest
+fi
+
+if [ "$(docker images -q brtcyphal/cyphal_pycharm:latest)" ]; then
+  docker rmi brtcyphal/cyphal_pycharm:latest
+fi
+
+cd "$(dirname "$(realpath "$0")")"
+if [ -z "$1" ]; then
+  VERSION=2022.2.3
+else
+  VERSION=$1
+fi
+curl -LO "https://download.jetbrains.com/python/pycharm-professional-${VERSION}.tar.gz"
+tar xvzf pycharm-*.tar.gz
+mv pycharm-${VERSION} _opt_pycharm
+mkdir -p _opt_pycharm/bin
+
+cp env.sh _opt_pycharm/.env.sh
+
+rm pycharm*
+
+mv _opt_pycharm _opt
+
+docker build -t brtcyphal/cyphal_pycharm .
+
+rm -rf _opt
+
+# Building:
+# ./build-opt
+
+# Pushing:
+# docker push brtcyphal/cyphal_pycharm:<tag>

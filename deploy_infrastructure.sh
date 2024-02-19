@@ -2,7 +2,7 @@
 echo $PWD
 
 # Configuring CAN and virtual CAN interface to set up automatically:
-echo "
+sudo echo "
 can
 can_raw
 vcan
@@ -11,7 +11,7 @@ vcan
 systemctl start systemd-networkd
 systemctl enable systemd-networkd
 
-echo "
+sudo echo "
 [NetDev]
 Name=vcan0
 Kind=vcan
@@ -19,17 +19,20 @@ MTUBytes=8
 Description=Virtual CAN0 network interface
 " >> /etc/systemd/network/vcan0.netdev
 
-echo "
+sudo echo "
 [Match]
 Name=vcan0
 " >> /etc/systemd/network/80-vcan.network
 
+./create_aderc.sh
+
+rm $HOME/cyphalhome/.adehome
+touch $HOME/cyphalhome/.adehome
+
 # Cloning repositories:
-mkdir -p $HOME/BRT/gitwork/
+cd $HOME/cyphalhome
 
-cd $HOME/BRT/gitwork/
-
-if [ -d "$HOME/BRT/gitwork/BRTCyphal" ]; then
+if [ -d "$HOME/cyphalhome/BRTCyphal" ]; then
     echo "BRTCyphal already exists."
     cd BRTCyphal
     git pull
@@ -41,6 +44,3 @@ fi
 git submodule update --init --recursive
 
 echo "To start the virtual can bus, restart the computer now (It is required only once)."
-
-echo "Then you can run the cyphal container using the commands below:
-      docker-compose run cyphal bash"

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# Check that cyphal_clion container is not running
+
+set -xe
+
+if [ "$(docker ps -aq -f name=brtcyphal/cyphal_clion_latest)" ]; then
+  if [ ! "$(docker ps -aq -f status=exited -f name=brtcyphal/cyphal_clion_latest)" ]; then
+    echo "cyphal_clion container is running, stop ade and try again"
+    exit 1
+  fi
+  docker rm brtcyphal/cyphal_clion_latest
+fi
+
+if [ "$(docker images -q brtcyphal/cyphal_clion:latest)" ]; then
+  docker rmi brtcyphal/cyphal_clion:latest
+fi
+
+cd "$(dirname "$(realpath "$0")")"
+if [ -z "$1" ]; then
+  VERSION=2022.2.4
+else
+  VERSION=$1
+fi
+curl -LO "https://download.jetbrains.com/cpp/CLion-${VERSION}.tar.gz"
+tar xvzf CLion-*.tar.gz
+mv clion* _opt_clion
+mkdir -p _opt_clion/bin
+
+cp env.sh _opt_clion/.env.sh
+
+rm CLion*
+
+mv _opt_clion _opt
+
+docker build -t brtcyphal/cyphal_clion .
+
+rm -rf _opt
+
+# Building:
+# ./build-opt
+
+# Pushing:
+# docker push brtcyphal/cyphal_clion:<tag>
