@@ -57,7 +57,7 @@ fi
 
 if [ "$ADE_TAG" == "" ] && [ "$first" == "stop" ]; then                      # stop all ade environments
   echo "Stop all ade environments"
-  docker ps -a | grep ade | awk '{print $1}' | xargs docker stop >/dev/null # remove all containers which contain name "ade"
+  docker ps -a | grep cyphal | awk '{print $1}' | xargs docker stop >/dev/null # remove all containers which contain name "cyphal"
 elif [ "$first" == "stop" ]; then # stop specific ade environment
   # ade stop work incorrectly! Use your own scripts
   echo "Stop $ADE_TAG"
