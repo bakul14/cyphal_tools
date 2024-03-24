@@ -20,42 +20,69 @@ RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Add packages to build libs
 
-RUN apt-get update && \
-    apt-get install -y \
-    apt-utils \
-    build-essential \
-    curl \
-    g++ \
-    gcc \
-    git \
-    gnupg2 \
-    libasound2 \
-    libboost-all-dev \
-    libeigen3-dev \
-    libffi-dev \
-    libflann-dev \
-    libgdbm-dev \
-    libncurses5-dev \
-    libnss3-dev \
-    libpcap-dev \
-    libreadline-dev \
-    libssl-dev \
-    libusb-1.0-0-dev \
-    libvtk7-dev \
-    lsb-release \
-    python3-dev \
-    python3-pip \
-    zlib1g-dev \
-  && rm -rf /var/lib/apt/lists/* /tmp/apt-packages
+RUN apt-get update &&   \
+    apt-get install -y  \
+    apt-utils           \
+    automake            \
+    binutils-dev        \
+    bison               \
+    build-essential     \
+    curl                \
+    flex                \
+    g++-multilib        \
+    gcc-multilib        \
+    genromfs            \
+    gettext             \
+    git                 \
+    gnupg2              \
+    gperf               \
+    gperf               \
+    kconfig-frontends   \
+    libasound2          \
+    libboost-all-dev    \
+    libeigen3-dev       \
+    libelf-dev          \
+    libexpat-dev        \
+    libffi-dev          \
+    libflann-dev        \
+    libgdbm-dev         \
+    libgmp-dev          \
+    libisl-dev          \
+    libmpc-dev          \
+    libmpfr-dev         \
+    libncurses5-dev     \
+    libncursesw5-dev    \
+    libnss3-dev         \
+    libpcap-dev         \
+    libreadline-dev     \
+    libssl-dev          \
+    libtool             \
+    libusb-1.0-0-dev    \
+    libvtk7-dev         \
+    lsb-release         \
+    minicom             \
+    nano                \
+    picocom             \
+    pkg-config          \
+    python3-dev         \
+    python3-pip         \
+    texinfo             \
+    u-boot-tools        \
+    util-linux          \
+    xxd                 \
+    zlib1g-dev          \
+    && rm -rf /var/lib/apt/lists/* /tmp/apt-packages
 
-RUN apt-get update && \
-    apt-get install -y \
-    iproute2 \
-    net-tools \
+RUN apt-get update &&   \
+    apt-get install -y  \
+    iproute2            \
+    net-tools           \
+    iputils-ping        \
     nano
 
-RUN pip install -U nunavut \
-    pip install -U yakut 
+RUN pip install -U nunavut  \
+    pip install -U yakut    \
+    pip install kconfiglib
 
 # Bash-prompt
 
