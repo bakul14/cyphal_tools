@@ -6,10 +6,10 @@ RUN apt-get update && \
     echo 'Etc/UTC' > /etc/timezone && \
     ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     apt-get install -y \
-        locales \
-        sudo \
-        tzdata \
-  && rm -rf /var/lib/apt/lists/*
+    locales \
+    sudo \
+    tzdata \
+    && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8; dpkg-reconfigure -f noninteractive locales
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
@@ -29,7 +29,9 @@ RUN apt-get update &&   \
     build-essential     \
     curl                \
     flex                \
+    g++                 \
     g++-multilib        \
+    gcc                 \
     gcc-multilib        \
     genromfs            \
     gettext             \
@@ -73,13 +75,33 @@ RUN apt-get update &&   \
     zlib1g-dev          \
     && rm -rf /var/lib/apt/lists/* /tmp/apt-packages
 
+# Net utils
 RUN apt-get update &&   \
     apt-get install -y  \
     iproute2            \
-    net-tools           \
+    iptables            \
     iputils-ping        \
-    nano
+    net-tools           \
+    netcat
 
+# USB & st-link utils
+RUN apt-get update &&   \
+    apt-get install -y  \
+    openocd             \
+    usbutils
+
+# Debug tools
+RUN apt-get update &&   \
+    apt-get install -y  \
+    gdbserver           \
+    gdb-multiarch
+
+# Unit test framework
+RUN apt-get update &&       \
+    apt-get install -y      \
+    catch2
+
+# Cyphal tools
 RUN pip install -U nunavut  \
     pip install -U yakut    \
     pip install kconfiglib
