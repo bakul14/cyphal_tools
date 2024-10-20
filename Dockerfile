@@ -61,6 +61,7 @@ RUN apt-get update &&   \
     libtool             \
     libusb-1.0-0-dev    \
     libvtk7-dev         \
+    libxcb-cursor-dev   \
     lsb-release         \
     minicom             \
     nano                \
@@ -102,9 +103,13 @@ RUN apt-get update &&       \
     catch2
 
 # Cyphal tools
-RUN pip install -U nunavut  \
-    pip install -U yakut    \
+RUN pip install -U nunavut &&   \
+    pip install -U yakut &&     \
     pip install kconfiglib
+
+# Qt6 packages
+ADD qt6-install.sh ./qt6-install.sh
+RUN ./qt6-install.sh
 
 # Bash-prompt
 
