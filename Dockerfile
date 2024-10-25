@@ -111,8 +111,15 @@ RUN pip install -U nunavut &&   \
 ADD qt6-install.sh ./qt6-install.sh
 RUN ./qt6-install.sh
 
-# Bash-prompt
+# CodeChecker, see quick start here:
+# https://engineer.yadro.com/article/codechecker-analiziruem-bolshoi-proekt-na-cplusplus-bystro-effektivno-i-besplatno/
+RUN pip3 install codechecker
 
+# GCC 13, G++ 13
+ADD update-gcc-g++.sh ./update-gcc-g++.sh
+RUN ./update-gcc-g++.sh
+
+# Bash-prompt
 COPY bashrc-git-prompt /
 RUN cat /bashrc-git-prompt >> /etc/skel/.bashrc && \
     rm /bashrc-git-prompt
