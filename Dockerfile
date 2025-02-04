@@ -111,13 +111,24 @@ RUN pip install -U nunavut &&   \
 ADD qt6-install.sh ./qt6-install.sh
 RUN ./qt6-install.sh
 
-# CodeChecker, see quick start here:
-# https://engineer.yadro.com/article/codechecker-analiziruem-bolshoi-proekt-na-cplusplus-bystro-effektivno-i-besplatno/
-RUN pip3 install codechecker
+# Google test 
+RUN git clone https://github.com/google/googletest.git  && \
+    cd googletest && mkdir build && cd build            && \
+    cmake ..                                            && \
+    make                                                && \
+    make install                                        && \
+    cd ../..                                            && \
+    rm -rf googletest
 
-# GCC 13, G++ 13
-ADD update-gcc-g++.sh ./update-gcc-g++.sh
-RUN ./update-gcc-g++.sh
+
+# PVS-Studio
+RUN wget -q -O - https://cdn.pvs-studio.com/etc/pubkey.txt | \
+    apt-key add -                                           && \
+    wget -O /etc/apt/sources.list.d/viva64.list \
+    https://cdn.pvs-studio.com/etc/viva64.list              && \
+    apt-get update -y && \
+    apt-get install -y pvs-studio                           && \
+    pvs-studio-analyzer credentials PVS-Studio Free FREE-FREE-FREE-FREE
 
 # Bash-prompt
 COPY bashrc-git-prompt /
