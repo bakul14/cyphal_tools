@@ -107,6 +107,10 @@ RUN pip install -U nunavut &&   \
     pip install -U yakut &&     \
     pip install kconfiglib
 
+RUN pip install -U  \
+    mbed-cli        \ 
+    mbed-tools
+
 # Qt6 packages
 ADD qt6-install.sh ./qt6-install.sh
 RUN ./qt6-install.sh
